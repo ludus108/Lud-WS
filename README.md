@@ -6,15 +6,15 @@ Progetto orchestrato con 9 MCU indipendenti che comunicano via seriale per un si
 
 | Repository | Ruolo | MCU |
 |-----------|-------|-----|
-| [Lud-WS-Display](https://github.com/ludus108/Lud-WS-Display) | Interfaccia utente / Display | TBD |
-| [Lud-WS-Ctrl](https://github.com/ludus108/Lud-WS-Ctrl) | Controller principale | TBD |
-| [Lud-WS-Router](https://github.com/ludus108/Lud-WS-Router) | Hub comunicazione seriale | TBD |
-| [Lud-WS-SynthA_M](https://github.com/ludus108/Lud-WS-SynthA_M) | Sintetizzatore A - Modulation | TBD |
-| [Lud-WS-SynthA_V](https://github.com/ludus108/Lud-WS-SynthA_V) | Sintetizzatore A - Voice | TBD |
-| [Lud-WS-SynthB](https://github.com/ludus108/Lud-WS-SynthB) | Sintetizzatore B | TBD |
-| [Lud-WS-Teensy](https://github.com/ludus108/Lud-WS-Teensy) | Audio processing | Teensy |
-| [Lud-WS-Mod](https://github.com/ludus108/Lud-WS-Mod) | Moduli effetti/controllo | TBD |
-| [Lud-WS-Power](https://github.com/ludus108/Lud-WS-Power) | Gestione alimentazione | TBD |
+| [Lud-WS-Display](https://github.com/ludus108/Lud-WS-Display) | Display / SD Mem | ESP32s3 |
+| [Lud-WS-Ctrl](https://github.com/ludus108/Lud-WS-Ctrl) | Ctrl Pots / Keyboard | Pi Pico |
+| [Lud-WS-Router](https://github.com/ludus108/Lud-WS-Router) | Hub comunicazione seriale | Pi Pico |
+| [Lud-WS-SynthA_M](https://github.com/ludus108/Lud-WS-SynthA_M) | PoliSynth A - Main voce 1 | RP2040 |
+| [Lud-WS-SynthA_V](https://github.com/ludus108/Lud-WS-SynthA_V) | PoliSynth A - Voci 2,3/4,5 | RP2040 |
+| [Lud-WS-SynthB](https://github.com/ludus108/Lud-WS-SynthB) | Para/Mono Synth B | RP2040 |
+| [Lud-WS-Teensy](https://github.com/ludus108/Lud-WS-Teensy) | Sampler & Trakcs | Teensy 4.1 |
+| [Lud-WS-Mod](https://github.com/ludus108/Lud-WS-Mod) | Moduli effetti/controllo | Pi Pico |
+| [Lud-WS-Power](https://github.com/ludus108/Lud-WS-Power) | Gestione alimentazione | LgxF328 |
 
 ## 🚀 Quick Start
 
