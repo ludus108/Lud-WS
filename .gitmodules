@@ -1,3 +1,6 @@
 [submodule "Lud-WS-Display"]
 	path = Lud-WS-Display
 	url = https://github.com/ludus108/Lud-WS-Display
+[submodule "Lud-WS-Router"]
+	path = Lud-WS-Router
+	url = https://github.com/ludus108/Lud-WS-Router
