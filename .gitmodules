@@ -4,3 +4,9 @@
 [submodule "Lud-WS-Router"]
 	path = Lud-WS-Router
 	url = https://github.com/ludus108/Lud-WS-Router
+[submodule "Lud-WS-Ctrl"]
+	path = Lud-WS-Ctrl
+	url = https://github.com/ludus108/Lud-WS-Ctrl
+[submodule "Lud-WS-Mod"]
+	path = Lud-WS-Mod
+	url = https://github.com/ludus108/Lud-WS-Mod
