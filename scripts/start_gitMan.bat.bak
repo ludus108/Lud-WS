@@ -1,0 +1,47 @@
+@echo off
+setlocal
+
+set "TARGET=git-submodules-menu-safe.bat"
+set "TARGET_PATH=%~dp0%TARGET%"
+
+if not exist "%TARGET_PATH%" (
+  echo [ERR] Script non trovato:
+  echo       %TARGET_PATH%
+  pause
+  exit /b 1
+)
+
+REM 1) Prova PATH diretto git-bash.exe
+set "GIT_BASH="
+for /f "delims=" %%G in ('where git-bash.exe 2^>nul') do (
+  set "GIT_BASH=%%G"
+  goto :found_bash
+)
+
+REM 2) Prova percorsi standard
+if exist "%ProgramFiles%\Git\git-bash.exe" set "GIT_BASH=%ProgramFiles%\Git\git-bash.exe"
+if not defined GIT_BASH if exist "%ProgramFiles(x86)%\Git\git-bash.exe" set "GIT_BASH=%ProgramFiles(x86)%\Git\git-bash.exe"
+if not defined GIT_BASH if exist "%LocalAppData%\Programs\Git\git-bash.exe" set "GIT_BASH=%LocalAppData%\Programs\Git\git-bash.exe"
+
+:found_bash
+if not defined GIT_BASH (
+  echo [ERR] git-bash.exe non trovato.
+  echo Installa Git for Windows oppure aggiungi git-bash.exe al PATH.
+  pause
+  exit /b 1
+)
+
+echo [INFO] Uso Git Bash:
+echo       %GIT_BASH%
+echo [INFO] Avvio:
+echo       %TARGET_PATH%
+
+REM Converte path Windows -> path stile Git Bash (C:/...)
+set "WIN_PATH=%TARGET_PATH%"
+set "WIN_PATH=%WIN_PATH:\=/%"
+
+REM Avvia Git Bash e lancia lo script
+"%GIT_BASH%" --login -i -c "\"%WIN_PATH%\""
+
+endlocal
+exit /b 0
