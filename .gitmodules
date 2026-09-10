@@ -10,3 +10,18 @@
 [submodule "Lud-WS-Mod"]
 	path = Lud-WS-Mod
 	url = https://github.com/ludus108/Lud-WS-Mod
+[submodule "Lud-WS-SynthA_M"]
+	path = Lud-WS-SynthA_M
+	url = https://github.com/ludus108/Lud-WS-SynthA_M
+[submodule "Lud-WS-SynthA_V"]
+	path = Lud-WS-SynthA_V
+	url = https://github.com/ludus108/Lud-WS-SynthA_V
+[submodule "Lud-WS-SynthB"]
+	path = Lud-WS-SynthB
+	url = https://github.com/ludus108/Lud-WS-SynthB
+[submodule "Lud-WS-Teensy"]
+	path = Lud-WS-Teensy
+	url = https://github.com/ludus108/Lud-WS-Teensy
+[submodule "Lud-WS-Power"]
+	path = Lud-WS-Power
+	url = https://github.com/ludus108/Lud-WS-Power
