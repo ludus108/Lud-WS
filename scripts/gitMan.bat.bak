@@ -11,7 +11,7 @@ set "DEFAULT_BRANCH=main"
 set "DEBUG_HOLD=1"
 
 call :main
-goto :eof
+goto :hold
 
 :main
 git --version >nul 2>&1 || goto :fatal_git

@@ -3,8 +3,7 @@ setlocal EnableDelayedExpansion
 chcp 65001 >nul
 
 REM ============================================================
-REM gitMan.bat - ADVANCED SAFE + ANTI-CHIUSURA
-REM (da avviare tramite launcher Git Bash)
+REM gitMan_v13.bat - ADVANCED SAFE + PRE-PULL REMEDY
 REM ============================================================
 
 set "DEFAULT_BRANCH=main"
@@ -21,10 +20,10 @@ goto menu
 :menu
 cls
 echo ==========================================
-echo  gitMan - Git + Submodules Manager ADV
+echo  gitMan v13 - Git + Submodules Manager
 echo ==========================================
 echo 1^) Status
-echo 2^) Pull (root + submodules)
+echo 2^) Pull (root + submodules) [con rimedio]
 echo 3^) Create/Switch branch (all)
 echo 4^) Commit (all) [con conferma]
 echo 5^) Push (root + submodules) [clean required]
@@ -33,7 +32,7 @@ echo 7^) Foreach custom command
 echo 8^) Gestione SINGOLO submodule
 echo 0^) Exit
 echo.
-set /p CHOICE=Seleziona opzione: 
+set /p CHOICE=Seleziona opzione:
 
 if "%CHOICE%"=="1" goto do_status
 if "%CHOICE%"=="2" goto do_pull
@@ -51,7 +50,7 @@ goto menu
 
 :confirm
 set "ANSWER="
-set /p ANSWER=%~1 [Y/N]: 
+set /p ANSWER=%~1 [Y/N]:
 if /I "%ANSWER%"=="Y" exit /b 0
 if /I "%ANSWER%"=="N" exit /b 1
 echo [WARN] Inserisci Y o N.
@@ -64,7 +63,6 @@ git submodule update --init --recursive || goto :fatal_cmd
 goto :eof
 
 :get_current_branch
-REM uso: call :get_current_branch OUTVAR
 set "TMPB="
 for /f "delims=" %%b in ('git rev-parse --abbrev-ref HEAD') do set "TMPB=%%b"
 if /i "!TMPB!"=="HEAD" set "TMPB=%DEFAULT_BRANCH%"
@@ -73,7 +71,6 @@ set "%~1=!TMPB!"
 goto :eof
 
 :pick_branch
-REM Uso: call :pick_branch OUTVAR
 set "PB_COUNT=0"
 for /f "delims=" %%b in ('git for-each-ref --format="%%(refname:short)" refs/heads refs/remotes/origin ^| findstr /V /I "origin/HEAD"') do (
   set /a PB_COUNT+=1
@@ -90,11 +87,11 @@ echo.
 echo ===== Seleziona branch =====
 for /L %%i in (1,1,%PB_COUNT%) do echo %%i^) !PB_%%i!
 echo 0^) Inserimento manuale
-set /p PB_SEL=Scelta branch: 
+set /p PB_SEL=Scelta branch:
 
 if "%PB_SEL%"=="0" (
   set "PB_MANUAL="
-  set /p PB_MANUAL=Inserisci branch: 
+  set /p PB_MANUAL=Inserisci branch:
   if "%PB_MANUAL%"=="" (set "%~1=%DEFAULT_BRANCH%") else (set "%~1=%PB_MANUAL%")
   exit /b 0
 )
@@ -109,7 +106,6 @@ set "%~1=!PB_%PB_SEL%!"
 exit /b 0
 
 :pick_branch_in_current_repo
-REM Uso: call :pick_branch_in_current_repo OUTVAR (dentro submodule)
 set "PB_COUNT=0"
 for /f "delims=" %%b in ('git for-each-ref --format="%%(refname:short)" refs/heads refs/remotes/origin ^| findstr /V /I "origin/HEAD"') do (
   set /a PB_COUNT+=1
@@ -125,11 +121,11 @@ echo.
 echo ===== Seleziona branch (submodule) =====
 for /L %%i in (1,1,%PB_COUNT%) do echo %%i^) !PB_%%i!
 echo 0^) Inserimento manuale
-set /p PB_SEL=Scelta branch: 
+set /p PB_SEL=Scelta branch:
 
 if "%PB_SEL%"=="0" (
   set "PB_MANUAL="
-  set /p PB_MANUAL=Inserisci branch: 
+  set /p PB_MANUAL=Inserisci branch:
   if "%PB_MANUAL%"=="" (set "%~1=%DEFAULT_BRANCH%") else (set "%~1=%PB_MANUAL%")
   exit /b 0
 )
@@ -160,6 +156,7 @@ for /f "tokens=2 delims= " %%s in ('git submodule status --recursive') do (
     if errorlevel 1 set "SUB_DIRTY=1"
     git diff --cached --quiet
     if errorlevel 1 set "SUB_DIRTY=1"
+    for /f "delims=" %%u in ('git ls-files --others --exclude-standard') do set "SUB_DIRTY=1"
     popd >nul
   )
 )
@@ -178,6 +175,73 @@ if errorlevel 1 (
   exit /b 1
 )
 exit /b 0
+
+:is_repo_dirty
+git diff --quiet
+if errorlevel 1 exit /b 1
+git diff --cached --quiet
+if errorlevel 1 exit /b 1
+for /f "delims=" %%u in ('git ls-files --others --exclude-standard') do exit /b 1
+exit /b 0
+
+:remedy_before_pull_current_repo
+REM uso: call :remedy_before_pull_current_repo "LABEL"
+REM ritorna 0=ok, 1=skip/abort
+set "LBL=%~1"
+
+call :is_repo_dirty
+if not errorlevel 1 exit /b 0
+
+echo.
+echo [WARN] Repo non pulita: %LBL%
+git status -sb
+echo.
+echo Scegli rimedio prima del pull:
+echo  1^) Auto-commit (tracked + untracked)
+echo  2^) Stash -u
+echo  3^) Skip pull su questa repo
+echo  0^) Annulla operazione
+set /p RMD=Scelta:
+
+if "%RMD%"=="1" (
+  set "RMSG="
+  set /p RMSG=Messaggio commit [default: wip: pre-pull auto-save]:
+  if "%RMSG%"=="" set "RMSG=wip: pre-pull auto-save"
+  git add -A
+  git commit -m "%RMSG%"
+  if errorlevel 1 (
+    echo [ERR] Commit automatico fallito in %LBL%.
+    exit /b 1
+  )
+  echo [OK] Auto-commit eseguito in %LBL%.
+  exit /b 0
+)
+
+if "%RMD%"=="2" (
+  set "SMSG="
+  set /p SMSG=Messaggio stash [default: wip: pre-pull stash]:
+  if "%SMSG%"=="" set "SMSG=wip: pre-pull stash"
+  git stash push -u -m "%SMSG%"
+  if errorlevel 1 (
+    echo [ERR] Stash fallito in %LBL%.
+    exit /b 1
+  )
+  echo [OK] Stash creato in %LBL%.
+  exit /b 0
+)
+
+if "%RMD%"=="3" (
+  echo [INFO] Skip pull su %LBL%.
+  exit /b 1
+)
+
+if "%RMD%"=="0" (
+  echo [INFO] Operazione annullata.
+  exit /b 1
+)
+
+echo [WARN] Scelta non valida.
+exit /b 1
 
 :do_status
 echo [INFO] STATUS ROOT
@@ -199,6 +263,14 @@ call :pick_branch BRANCH
 echo %BRANCH% | findstr /B /I "origin/" >nul
 if not errorlevel 1 set "BRANCH=%BRANCH:origin/=%"
 
+REM Rimedio ROOT prima del pull
+call :remedy_before_pull_current_repo "ROOT"
+if errorlevel 1 (
+  echo [INFO] Pull root annullato/skip.
+  call :hold
+  goto menu
+)
+
 echo [INFO] Pull root su branch: %BRANCH%
 git fetch --all --prune || goto :fatal_cmd
 git checkout %BRANCH%
@@ -208,7 +280,7 @@ if errorlevel 1 (
   goto menu
 )
 git pull --ff-only origin %BRANCH%
-if errorlevel 1 echo [WARN] Pull root non fast-forward.
+if errorlevel 1 echo [WARN] Pull root non fast-forward o bloccato.
 
 echo [INFO] Pull submoduli su branch %BRANCH%
 for /f "tokens=2 delims= " %%s in ('git submodule status --recursive') do (
@@ -218,23 +290,27 @@ for /f "tokens=2 delims= " %%s in ('git submodule status --recursive') do (
   if errorlevel 1 (
     echo [ERR] Impossibile entrare in %%s
   ) else (
-    git fetch --all --prune
-
-    git show-ref --verify --quiet refs/heads/%BRANCH%
+    call :remedy_before_pull_current_repo "SUBMODULE %%s"
     if errorlevel 1 (
-      git ls-remote --exit-code --heads origin %BRANCH% >nul 2>&1
-      if errorlevel 1 (
-        echo [WARN] Branch %BRANCH% non trovata in %%s, skip.
-      ) else (
-        git checkout -b %BRANCH% --track origin/%BRANCH%
-        git pull --ff-only origin %BRANCH%
-      )
+      echo [INFO] Skip pull submodule %%s
     ) else (
-      git checkout %BRANCH%
-      git pull --ff-only origin %BRANCH%
-      if errorlevel 1 echo [WARN] Pull non fast-forward in %%s
-    )
+      git fetch --all --prune
 
+      git show-ref --verify --quiet refs/heads/%BRANCH%
+      if errorlevel 1 (
+        git ls-remote --exit-code --heads origin %BRANCH% >nul 2>&1
+        if errorlevel 1 (
+          echo [WARN] Branch %BRANCH% non trovata in %%s, skip.
+        ) else (
+          git checkout -b %BRANCH% --track origin/%BRANCH%
+          git pull --ff-only origin %BRANCH%
+        )
+      ) else (
+        git checkout %BRANCH%
+        git pull --ff-only origin %BRANCH%
+        if errorlevel 1 echo [WARN] Pull non fast-forward in %%s
+      )
+    )
     popd >nul
   )
 )
@@ -251,7 +327,7 @@ goto menu
 :do_branch
 call :submodules_init
 set "NEWB="
-set /p NEWB=Nuova branch (es: feature/lws): 
+set /p NEWB=Nuova branch (es: feature/lws):
 if "%NEWB%"=="" (
   echo [ERR] Branch vuota.
   call :hold
@@ -283,7 +359,7 @@ goto menu
 :do_commit
 call :submodules_init
 set "MSG="
-set /p MSG=Messaggio commit: 
+set /p MSG=Messaggio commit:
 if "%MSG%"=="" (
   echo [ERR] Messaggio vuoto.
   call :hold
@@ -401,7 +477,7 @@ goto menu
 
 :do_foreach
 set "FCMD="
-set /p FCMD=Comando per ogni submodule (es: git status -sb): 
+set /p FCMD=Comando per ogni submodule (es: git status -sb):
 if "%FCMD%"=="" (
   echo [ERR] Comando vuoto.
   call :hold
@@ -429,7 +505,7 @@ if "%SM_COUNT%"=="0" (
 )
 echo 0^) Indietro
 echo.
-set /p SM_IDX=Seleziona submodule: 
+set /p SM_IDX=Seleziona submodule:
 
 if "%SM_IDX%"=="0" goto menu
 if not defined SM_%SM_IDX% (
@@ -455,7 +531,7 @@ echo 6^) Custom command
 echo 7^) Cambia submodule
 echo 0^) Menu principale
 echo.
-set /p SMACT=Seleziona azione: 
+set /p SMACT=Seleziona azione:
 
 if "%SMACT%"=="1" goto sm_status
 if "%SMACT%"=="2" goto sm_pull
@@ -480,6 +556,13 @@ goto submodule_menu
 
 :sm_pull
 pushd "%SM_PATH%"
+call :remedy_before_pull_current_repo "SUBMODULE %SM_PATH%"
+if errorlevel 1 (
+  popd
+  call :hold
+  goto submodule_menu
+)
+
 set "SMB="
 echo [INFO] Selezione branch per PULL su %SM_PATH%
 call :pick_branch_in_current_repo SMB
@@ -512,7 +595,7 @@ goto submodule_menu
 
 :sm_branch
 set "NEWB="
-set /p NEWB=Nuova branch: 
+set /p NEWB=Nuova branch:
 if "%NEWB%"=="" (
   echo [ERR] Branch vuota.
   call :hold
@@ -528,7 +611,7 @@ goto submodule_menu
 
 :sm_commit
 set "SMSG="
-set /p SMSG=Messaggio commit: 
+set /p SMSG=Messaggio commit:
 if "%SMSG%"=="" (
   echo [ERR] Messaggio vuoto.
   call :hold
@@ -615,7 +698,7 @@ goto submodule_menu
 
 :sm_custom
 set "SCMD="
-set /p SCMD=Comando custom per %SM_PATH%: 
+set /p SCMD=Comando custom per %SM_PATH%:
 if "%SCMD%"=="" (
   echo [ERR] Comando vuoto.
   call :hold
