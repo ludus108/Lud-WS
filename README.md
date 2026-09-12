@@ -1,6 +1,6 @@
 # Lud-WS Multi-MCU Project
-
-Progetto orchestrato con 9 MCU indipendenti che comunicano via seriale per un sistema di sintesi audio e controllo.
+Ludus WorkStation
+Progetto orchestrato con 9 MCU indipendenti che comunicano via seriale per un sistema di sintesi e processing audio analogico e controllo digitale.
 
 ## 📦 Componenti MCU
 
