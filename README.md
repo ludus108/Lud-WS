@@ -1,3 +1,6 @@
+    - Ludus WorkStation -
+analog processing - digital control
+
 | Repository | Ruolo | MCU | Versione |
 |-----------|-------|-----|----------|
 | [Lud-WS-Display](https://github.com/ludus108/Lud-WS-Display) | Display / SD Mem | ESP32s3 | v0.0.9 |
