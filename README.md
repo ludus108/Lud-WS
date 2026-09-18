@@ -1,4 +1,6 @@
-    - Ludus WorkStation -
+# Lud-WS
+     
+     - Ludus WorkStation -
 analog processing - digital control
 
 | Repository | Ruolo | MCU | Versione |
