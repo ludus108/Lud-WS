@@ -25,3 +25,6 @@
 [submodule "Lud-WS-Power"]
 	path = Lud-WS-Power
 	url = https://github.com/ludus108/Lud-WS-Power
+[submodule "Lud-WS-SynthA_V2"]
+	path = Lud-WS-SynthA_V2
+	url = https://github.com/ludus108/Lud-WS-SynthA_V2
