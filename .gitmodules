@@ -16,9 +16,6 @@
 [submodule "Lud-WS-SynthA_V"]
 	path = Lud-WS-SynthA_V
 	url = https://github.com/ludus108/Lud-WS-SynthA_V
-[submodule "Lud-WS-SynthA_V2"]
-	path = Lud-WS-SynthA_V2
-	url = https://github.com/ludus108/Lud-WS-SynthA_V2
 [submodule "Lud-WS-SynthB"]
 	path = Lud-WS-SynthB
 	url = https://github.com/ludus108/Lud-WS-SynthB
