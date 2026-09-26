@@ -5,7 +5,7 @@ analog processing - digital control
 
 | Repository | Ruolo | MCU | Versione |
 |-----------|-------|-----|----------|
-| [Lud-WS-Display](https://github.com/ludus108/Lud-WS-Display) | Display / SD Mem | ESP32s3 | v0.0.15 |
+| [Lud-WS-Display](https://github.com/ludus108/Lud-WS-Display) | Display / SD Mem | ESP32s3 | v0.0.14 |
 | [Lud-WS-Ctrl](https://github.com/ludus108/Lud-WS-Ctrl) | Ctrl panel / Keyboard | Pi Pico 2 | v0.0.1 |
 | [Lud-WS-Router](https://github.com/ludus108/Lud-WS-Router) | Hub comunicazione seriale | Pi Pico 2 | v0.0.4 |
 | [Lud-WS-SynthA_M](https://github.com/ludus108/Lud-WS-SynthA_M) | PoliSynth A - Main voce 1 | RP2350 | v0.1.1 |
