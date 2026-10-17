@@ -1,0 +1,53 @@
+{
+    "folders": [
+        {
+            "name": "📁 Display",
+            "path": "Lud-WS-Display"
+        },
+        {
+            "name": "📁 Router",
+            "path": "Lud-WS-Router"
+        },
+        {
+            "name": "📁 Ctrl",
+            "path": "Lud-WS-Ctrl"
+        },
+        {
+            "name": "📁 Mod",
+            "path": "Lud-WS-Mod"
+        },
+        {
+            "name": "📁 SyntA_M",
+            "path": "Lud-WS-SyntA_M"
+        },
+        {
+            "name": "📁 SynthA_V",
+            "path": "Lud-WS-SynthA_V"
+        },
+        {
+            "name": "📁 SynthA_V2",
+            "path": "Lud-WS-SynthA_V2"
+        },
+        {
+            "name": "📁 SynthB",
+            "path": "Lud-WS-SynthB"
+        },
+        {
+            "name": "📁 Teensy",
+            "path": "Lud-WS-Teensy"
+        },
+        {
+            "name": "📁 Power",
+            "path": "Lud-WS-Power"
+        },
+        {
+            "name": "📄 Root",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/Lud-WS-*": true
+        }
+    }
+}
