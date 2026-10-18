@@ -43,6 +43,10 @@
         {
             "name": "📄 Root",
             "path": "."
+        },
+        {
+            "name": "Lud-WS-SynthA_M",
+            "path": "Lud-WS-SynthA_M"
         }
     ],
     "settings": {

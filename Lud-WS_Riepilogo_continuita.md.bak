@@ -1,0 +1,46 @@
+================================================================================
+LUD-WS — RIEPILOGO DI CONTINUITÀ (MIGRAZIONE PLATFORMIO)
+================================================================================
+Documento autocontenuto. Incollalo come primo messaggio in una nuova chat
+per riprendere il lavoro da dove è stato interrotto.
+
+Ultimo aggiornamento: 2026-10-17
+Focus sessione: migrazione completa da Arduino IDE 2 a PlatformIO + VS Code,
+               con setup workspace multi-root, Copilot Pro, dumpStatus() di
+               debug, ottimizzazione spazio su C:.
+================================================================================
+
+
+-------------------------------------------------------------------------------
+0. STRUTTURA REPOSITORY
+-------------------------------------------------------------------------------
+	Lud-WS/
+	├── Lud-WS.code-workspace     ← workspace multi-root VS Code (RINOMINATO)
+	├── Lud-WS-Display/           ← ESP32-S3
+	├── Lud-WS-Router/            ← RP2350 (Pico 2)
+	├── Lud-WS-Ctrl/              ← RP2040 (Pico)
+	├── Lud-WS-Mod/               ← (da migrare)
+	├── Lud-WS-SyntA_M/           ← RP2350
+	├── Lud-WS-SynthA_V/          ← RP2350 (da migrare)
+	├── Lud-WS-SynthA_V2/         ← RP2350 (da migrare)
+	├── Lud-WS-SynthB/            ← RP2350
+	├── Lud-WS-Teensy/            ← Teensy 4.1
+	└── Lud-WS-Power/             ← LGT8F328P
+
+Bus: LWS v1.1, frame [SENDER][SEQ][CMD][LEN][PAYLOAD][CRC8][&][!].
+
+
+-------------------------------------------------------------------------------
+1. AMBIENTE DI SVILUPPO
+-------------------------------------------------------------------------------
+- OS: Windows 11, cartella utente `C:\Users\User` (in Explorer appare "Utenti")
+- VS Code + estensione **PlatformIO IDE** (NON pioarduino-ide, disabilitata)
+- GitHub Copilot Pro attivo (contesto @workspace funzionante)
+- Git portable in `C:\PortableGit\cmd\git.exe` (PATH utente impostato)
+- PlatformIO Core 6.2.0, Python 3.11.7
+
+CONFIGURAZIONE PLATFORMIO (importante):
+- `.platformio` packages/toolchain → **`D:\platformio`** (~9 GB, risparmiati su C:)
+- `.platformio\penv` (Python) → rimane in **`C:\Users\User\.platformio\`** (~150 MB)
+- Variabile d'ambiente utente: `PLATFORMIO_CORE_DIR = D:\platformio`
+- Long paths Windows abilitati (necessario per Arduino 3.3.12):
